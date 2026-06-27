@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="prodman" prefHeight="650.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gabriel.account.utilControllers.AccountManController">
+    <padding>
+        <Insets bottom="0.0" left="0.0" right="0.0" top="0.0" />
+    </padding>
+    
+    <top>
+        <VBox BorderPane.alignment="CENTER">
+            <MenuBar>
+                <menus>
+                    <Menu text="File">
+                        <items>
+                            <MenuItem text="New Account" onAction="#onCreate" />
+                            <MenuItem text="Log Out" onAction="#onLogOut" />
+                            <MenuItem text="Close" onAction="#onClose" />
+                        </items>
+                    </Menu>
+                    <Menu text="Edit">
+                        <items>
+                            <MenuItem text="Modify" onAction="#onUpdate" />
+                            <MenuItem text="Delete" onAction="#onDelete" />
+                        </items>
+                    </Menu>
+                    <Menu text="About">
+                        <items>
+                            <MenuItem text="About" onAction="#onAbout" />
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
+            <VBox alignment="CENTER" spacing="10.0">
+                <padding>
+                    <Insets bottom="10.0" left="15.0" right="15.0" top="15.0" />
+                </padding>
+                <Label styleClass="header-title" text="Account Management System" />
+                <ImageView fx:id="productImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+            </VBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <VBox spacing="15.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="15.0" />
+            </padding>
+            <ListView fx:id="lvAccounts" onMouseClicked="#onMouseClicked" prefHeight="180.0" prefWidth="320.0" />
+            
+            <GridPane hgap="10.0" vgap="10.0">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER" minWidth="100.0" prefWidth="110.0" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="150.0" prefWidth="210.0" />
+                </columnConstraints>
+                
+                <Label text="Account ID:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="form-label" />
+                <TextField fx:id="tfId" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                
+                <Label text="Name (Owner):" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="form-label" />
+                <TextField fx:id="tfName" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                
+                <Label text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="form-label" />
+                <TextField fx:id="tfDesc" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                
+                <Label text="Account Type:" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="form-label" />
+                <TextField fx:id="tfUom" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                <Label text="Balance:" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="form-label" />
+                <TextField fx:id="tfBalance" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            </GridPane>
+        </VBox>
+    </center>
+</BorderPane>

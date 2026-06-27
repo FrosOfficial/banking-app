@@ -1,0 +1,8 @@
+jaservice:
+  api:
+    endpoint: http://localhost:8080/api/account
+logging:
+  level:
+    com:
+      gabriel:
+        account: TRACE

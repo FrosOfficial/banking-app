@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gabriel.account.utilControllers.UserSelectionController">
+    <VBox alignment="CENTER" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        </padding>
+        <Label styleClass="header-title" text="Select User Role" />
+        
+        <VBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
+            <Button fx:id="btnAdmin" minWidth="200.0" minHeight="50.0" styleClass="btn-primary" text="Admin" onAction="#onAdminClick" />
+            <Button fx:id="btnCustomer" minWidth="200.0" minHeight="50.0" styleClass="btn-secondary" text="Customer" onAction="#onCustomerClick" />
+        </VBox>
+    </VBox>
+</AnchorPane>
