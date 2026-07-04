@@ -62,20 +62,20 @@ This is a multi-module Maven project consisting of:
 ------------------------------------------------------------------------
 6. KEY FEATURES & AUTHENTICATION DETAILS
 ------------------------------------------------------------------------
-  Admin Account:
+  Admin Account (Hardcoded):
     - Email:     admin@bank.com
     - Password:  AdminPass123!
     
   Customer Creation:
     - Admin can create customer accounts from the dashboard.
-    - Password requirements:
+    - Password requirements (Not hashed yet):
         * Minimum 8 characters.
         * At least one lowercase letter.
         * At least one uppercase letter.
         * At least one digit.
         * At least one special character (e.g. _, @, $, !, %).
         
-  Customer Authentication:
+  Customer Authentication (Uses the Database credentials):
     - Customers log in directly using their configured email and password.
     - The "Show Password" checkbox toggles password visibility.
     - The search/load panel is hidden on successful login to prevent 
