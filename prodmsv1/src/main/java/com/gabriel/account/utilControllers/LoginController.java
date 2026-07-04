@@ -64,35 +64,26 @@ public class LoginController {
             return;
         }
 
-        // 1. Check for Admin Login
-        if (email.equalsIgnoreCase("admin@bank.com") && password.equals("AdminPass123!")) {
-            System.out.println("LoginController: Admin logged in successfully");
-            transitionToAdmin(actionEvent);
-            return;
-        }
-
-        // 2. Check for Customer Login
         try {
-            Account[] accounts = AccountService.getService().getAccounts();
-            Account matchingAccount = null;
-            if (accounts != null) {
-                for (Account acc : accounts) {
-                    if (acc.getEmail() != null && acc.getEmail().equalsIgnoreCase(email) &&
-                        acc.getPassword() != null && acc.getPassword().equals(password)) {
-                        matchingAccount = acc;
-                        break;
-                    }
-                }
+            // Single secure call: server does parameterized lookup + BCrypt verify.
+            // Client never receives other users' data.
+            Account account = AccountService.getService().login(email, password);
+
+            if (account == null) {
+                showAlert("Login Failed", "Invalid email or password.", Alert.AlertType.ERROR);
+                return;
             }
 
-            if (matchingAccount != null) {
-                System.out.println("LoginController: Customer logged in: " + matchingAccount.getName());
-                transitionToCustomer(actionEvent, matchingAccount);
+            // Route based on the isAdmin flag stored in the database — not hardcoded strings.
+            if (account.isAdmin()) {
+                System.out.println("LoginController: Admin logged in -> " + account.getEmail());
+                transitionToAdmin(actionEvent);
             } else {
-                showAlert("Login Failed", "Invalid email or password.", Alert.AlertType.ERROR);
+                System.out.println("LoginController: Customer logged in -> " + account.getName());
+                transitionToCustomer(actionEvent, account);
             }
         } catch (Exception ex) {
-            System.out.println("LoginController: Error fetching accounts: " + ex.getMessage());
+            System.out.println("LoginController: Login error: " + ex.getMessage());
             ex.printStackTrace();
             showAlert("Error", "Could not connect to the backend server. Make sure sbprodms is running.", Alert.AlertType.ERROR);
         }

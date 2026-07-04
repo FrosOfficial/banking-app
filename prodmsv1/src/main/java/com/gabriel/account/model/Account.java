@@ -13,6 +13,7 @@ public class Account {
     String photo;
     String email;
     String password;
+    boolean isAdmin;
 
     @Override
     public String toString() {

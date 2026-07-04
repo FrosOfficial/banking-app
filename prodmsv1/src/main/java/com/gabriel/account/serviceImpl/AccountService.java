@@ -119,4 +119,33 @@ public class AccountService {
                 getRestTemplate().exchange(url, HttpMethod.GET, request, Transaction[].class);
         return response.getBody();
     }
+
+    /**
+     * Sends credentials to POST /api/account/login.
+     * The server performs a parameterized DB lookup and BCrypt verification.
+     * Returns the Account (with isAdmin flag) on success, or null on failure.
+     * No full account list is ever downloaded to the client.
+     */
+    public Account login(String email, String password) {
+        String url = endpointUrl + "/login";
+        logger.info("login: " + url);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // Use a Map so MappingJackson2HttpMessageConverter serializes it as
+        // {"email":"...","password":"..."} — a raw String would be double-encoded.
+        java.util.Map<String, String> body = new java.util.HashMap<>();
+        body.put("email", email);
+        body.put("password", password);
+
+        HttpEntity<java.util.Map<String, String>> request = new HttpEntity<>(body, headers);
+        try {
+            final ResponseEntity<Account> response =
+                    getRestTemplate().exchange(url, HttpMethod.POST, request, Account.class);
+            return response.getBody();
+        } catch (Exception ex) {
+            logger.warn("login: " + ex.getMessage());
+            return null;
+        }
+    }
 }

@@ -26,6 +26,7 @@ public class AccountData {
 
     String email;
     String password;
+    boolean isAdmin;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
