@@ -1,6 +1,9 @@
 package com.gabriel.account.controller;
 
+import com.gabriel.account.entity.TransactionData;
 import com.gabriel.account.model.Account;
+import com.gabriel.account.model.Transaction;
+import com.gabriel.account.repository.TransactionDataRepository;
 import com.gabriel.account.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,12 +13,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 public class AccountController {
     Logger logger = LoggerFactory.getLogger(AccountController.class);
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private TransactionDataRepository transactionDataRepository;
 
     @GetMapping("/api/account")
     public ResponseEntity<?> listAccounts() {
@@ -98,6 +107,14 @@ public class AccountController {
             }
             account.setBalance(account.getBalance() + amount);
             Account updatedAccount = accountService.update(account);
+
+            // Log Transaction
+            TransactionData tx = new TransactionData();
+            tx.setAccountId(id);
+            tx.setType("DEPOSIT");
+            tx.setAmount(amount);
+            transactionDataRepository.save(tx);
+
             return ResponseEntity.ok(updatedAccount);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
@@ -120,8 +137,37 @@ public class AccountController {
             }
             account.setBalance(account.getBalance() - amount);
             Account updatedAccount = accountService.update(account);
+
+            // Log Transaction
+            TransactionData tx = new TransactionData();
+            tx.setAccountId(id);
+            tx.setType("WITHDRAWAL");
+            tx.setAmount(amount);
+            transactionDataRepository.save(tx);
+
             return ResponseEntity.ok(updatedAccount);
         } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("api/account/{id}/transactions")
+    public ResponseEntity<?> getTransactions(@PathVariable final Integer id) {
+        logger.info("Transactions request for account id >> " + Integer.toString(id));
+        try {
+            List<TransactionData> txDataList = transactionDataRepository.findByAccountIdOrderByCreatedDesc(id);
+            List<Transaction> txList = txDataList.stream().map(tx -> {
+                Transaction t = new Transaction();
+                t.setId(tx.getId());
+                t.setAccountId(tx.getAccountId());
+                t.setType(tx.getType());
+                t.setAmount(tx.getAmount());
+                t.setCreated(tx.getCreated());
+                return t;
+            }).collect(Collectors.toList());
+            return ResponseEntity.ok(txList);
+        } catch (Exception ex) {
+            logger.error("Failed to retrieve transactions: {}", ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }

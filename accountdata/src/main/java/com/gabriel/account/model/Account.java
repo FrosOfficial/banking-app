@@ -11,6 +11,8 @@ public class Account {
     String accountTypeName;
     double balance;
     String photo;
+    String email;
+    String password;
 
     @Override
     public String toString() {

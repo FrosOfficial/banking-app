@@ -22,7 +22,7 @@
     <center>
         <VBox spacing="20.0" BorderPane.alignment="CENTER">
             <!-- Account Loading -->
-            <VBox spacing="8.0" style="-fx-background-color: white; -fx-padding: 10px; -fx-background-radius: 6px; -fx-border-color: #e5e7eb; -fx-border-radius: 6px;">
+            <VBox fx:id="vboxSearch" spacing="8.0" style="-fx-background-color: white; -fx-padding: 10px; -fx-background-radius: 6px; -fx-border-color: #e5e7eb; -fx-border-radius: 6px;">
                 <Label text="Enter Account ID:" styleClass="form-label" />
                 <HBox spacing="10.0">
                     <TextField fx:id="tfSearchId" promptText="e.g. 1" HBox.hgrow="ALWAYS" />
@@ -47,7 +47,7 @@
                 <VBox spacing="10.0" alignment="CENTER" style="-fx-padding: 10px 0 0 0;">
                     <Button text="Deposit" minWidth="200.0" styleClass="btn-secondary" onAction="#onDeposit" />
                     <Button text="Withdraw" minWidth="200.0" styleClass="btn-danger" onAction="#onWithdraw" />
-                    <Button text="Balance Inquiry" minWidth="200.0" styleClass="btn-primary" onAction="#onBalanceInquiry" />
+                    <Button text="Transaction History" minWidth="200.0" styleClass="btn-primary" onAction="#onTransactionHistory" />
                 </VBox>
             </VBox>
         </VBox>

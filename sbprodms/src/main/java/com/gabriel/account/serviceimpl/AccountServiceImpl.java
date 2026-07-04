@@ -37,6 +37,8 @@ public class AccountServiceImpl implements AccountService {
             account.setAccountTypeId(accountData.getAccountTypeId());
             account.setAccountTypeName(accountData.getAccountTypeName());
             account.setBalance(accountData.getBalance());
+            account.setEmail(accountData.getEmail());
+            account.setPassword(accountData.getPassword());
             accounts.add(account);
         }
 
@@ -56,6 +58,8 @@ public class AccountServiceImpl implements AccountService {
         accountData.setAccountTypeId(account.getAccountTypeId());
         accountData.setAccountTypeName(account.getAccountTypeName());
         accountData.setBalance(account.getBalance());
+        accountData.setEmail(account.getEmail());
+        accountData.setPassword(account.getPassword());
 
         accountData = accountDataRepository.save(accountData);
         logger.info("add: Saved " + accountData.toString());
@@ -67,6 +71,8 @@ public class AccountServiceImpl implements AccountService {
         newAccount.setAccountTypeId(accountData.getAccountTypeId());
         newAccount.setAccountTypeName(accountData.getAccountTypeName());
         newAccount.setBalance(accountData.getBalance());
+        newAccount.setEmail(accountData.getEmail());
+        newAccount.setPassword(accountData.getPassword());
         return newAccount;
     }
 
@@ -79,6 +85,8 @@ public class AccountServiceImpl implements AccountService {
         accountData.setAccountTypeId(account.getAccountTypeId());
         accountData.setAccountTypeName(account.getAccountTypeName());
         accountData.setBalance(account.getBalance());
+        accountData.setEmail(account.getEmail());
+        accountData.setPassword(account.getPassword());
 
         accountData = accountDataRepository.save(accountData);
 
@@ -89,6 +97,8 @@ public class AccountServiceImpl implements AccountService {
         newAccount.setAccountTypeId(accountData.getAccountTypeId());
         newAccount.setAccountTypeName(accountData.getAccountTypeName());
         newAccount.setBalance(accountData.getBalance());
+        newAccount.setEmail(accountData.getEmail());
+        newAccount.setPassword(accountData.getPassword());
         return newAccount;
     }
 
@@ -106,6 +116,8 @@ public class AccountServiceImpl implements AccountService {
             account.setAccountTypeId(accountDatum.getAccountTypeId());
             account.setAccountTypeName(accountDatum.getAccountTypeName());
             account.setBalance(accountDatum.getBalance());
+            account.setEmail(accountDatum.getEmail());
+            account.setPassword(accountDatum.getPassword());
             return account;
         }
         logger.info("Failed >> unable to locate account");

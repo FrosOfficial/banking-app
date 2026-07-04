@@ -24,6 +24,9 @@ public class AccountData {
 
     String photo;
 
+    String email;
+    String password;
+
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")

@@ -236,19 +236,19 @@ public class AccountManController implements Initializable {
         Window window = currentScene.getWindow();
         window.hide();
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("user-selection-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("login-view.fxml"));
             Parent root = fxmlLoader.load();
-            UserSelectionController userSelectionController = fxmlLoader.getController();
-            userSelectionController.setStage(stage);
+            LoginController loginController = fxmlLoader.getController();
+            loginController.setStage(stage);
 
             Scene scene = new Scene(root, 300, 600);
             String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
             scene.getStylesheets().add(css);
-            stage.setTitle("Role Selection");
+            stage.setTitle("Login");
             stage.setScene(scene);
             stage.show();
         } catch (Exception ex) {
-            System.out.println("Error returning to selection: " + ex.getMessage());
+            System.out.println("Error returning to login: " + ex.getMessage());
         }
     }
 

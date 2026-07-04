@@ -1,6 +1,7 @@
 package com.gabriel.account.serviceImpl;
 
 import com.gabriel.account.model.Account;
+import com.gabriel.account.model.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -106,6 +107,16 @@ public class AccountService {
         HttpEntity<?> request = new HttpEntity<>(null, headers);
         final ResponseEntity<Account> response =
                 getRestTemplate().exchange(url, HttpMethod.POST, request, Account.class);
+        return response.getBody();
+    }
+
+    public Transaction[] getTransactions(int accountId) {
+        String url = endpointUrl + "/" + Integer.toString(accountId) + "/transactions";
+        logger.info("getTransactions: " + url);
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<?> request = new HttpEntity<>(null, headers);
+        final ResponseEntity<Transaction[]> response =
+                getRestTemplate().exchange(url, HttpMethod.GET, request, Transaction[].class);
         return response.getBody();
     }
 }

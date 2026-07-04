@@ -1,6 +1,7 @@
 package com.gabriel.account.utilControllers;
 
 import com.gabriel.account.model.Account;
+import com.gabriel.account.model.Transaction;
 import com.gabriel.account.serviceImpl.AccountService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,14 +11,19 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.Data;
 import lombok.Setter;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
 @Data
@@ -27,6 +33,8 @@ public class CustomerController implements Initializable {
 
     @FXML
     private TextField tfSearchId;
+    @FXML
+    private VBox vboxSearch;
     @FXML
     private Label lblStatus;
     @FXML
@@ -39,6 +47,18 @@ public class CustomerController implements Initializable {
     private TextField tfAmount;
 
     private Account currentAccount = null;
+
+    public void loadCustomerAccount(Account account) {
+        if (vboxSearch != null) {
+            vboxSearch.setVisible(false);
+            vboxSearch.setManaged(false);
+        }
+        currentAccount = account;
+        lblOwner.setText("Owner: " + account.getName());
+        lblType.setText("Account Type: " + account.getAccountTypeName());
+        lblBalance.setText("Balance: ₱" + account.getBalance());
+        lblStatus.setText("Account loaded successfully.");
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -143,12 +163,45 @@ public class CustomerController implements Initializable {
     }
 
     @FXML
-    public void onBalanceInquiry(ActionEvent actionEvent) {
+    public void onTransactionHistory(ActionEvent actionEvent) {
         if (currentAccount == null) {
             showAlert("Error", "Please load an account first.", Alert.AlertType.ERROR);
             return;
         }
-        showAlert("Information", "Balance for " + currentAccount.getName() + ": ₱" + currentAccount.getBalance(), Alert.AlertType.INFORMATION);
+        try {
+            Transaction[] txs = AccountService.getService().getTransactions(currentAccount.getId());
+            
+            Dialog<Void> dialog = new Dialog<>();
+            dialog.setTitle("Transaction History");
+            dialog.setHeaderText("Transaction History for " + currentAccount.getName());
+            
+            ListView<String> listView = new ListView<>();
+            listView.setPrefWidth(320);
+            listView.setPrefHeight(250);
+            
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            
+            if (txs == null || txs.length == 0) {
+                listView.getItems().add("No transactions found.");
+            } else {
+                for (Transaction tx : txs) {
+                    String timeStr = tx.getCreated() != null ? df.format(tx.getCreated()) : "-";
+                    String amountStr = String.format("₱%,.2f", tx.getAmount());
+                    listView.getItems().add(timeStr + " - " + tx.getType() + " - " + amountStr);
+                }
+            }
+            
+            dialog.getDialogPane().setContent(listView);
+            dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+            
+            String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
+            dialog.getDialogPane().getStylesheets().add(css);
+            
+            dialog.showAndWait();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            showAlert("Error", "Failed to retrieve transactions: " + ex.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
@@ -158,19 +211,20 @@ public class CustomerController implements Initializable {
         Window window = node.getScene().getWindow();
         window.hide();
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("user-selection-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("login-view.fxml"));
             Parent root = fxmlLoader.load();
-            UserSelectionController userSelectionController = fxmlLoader.getController();
-            userSelectionController.setStage(stage);
+            LoginController loginController = fxmlLoader.getController();
+            loginController.setStage(stage);
 
             Scene scene = new Scene(root, 300, 600);
             String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
             scene.getStylesheets().add(css);
-            stage.setTitle("Role Selection");
+            stage.setTitle("Login");
             stage.setScene(scene);
             stage.show();
         } catch (Exception ex) {
-            System.out.println("Error returning to selection: " + ex.getMessage());
+            System.out.println("Error returning to login: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
