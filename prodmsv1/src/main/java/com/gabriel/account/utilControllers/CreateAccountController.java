@@ -65,6 +65,7 @@ public class CreateAccountController implements Initializable {
             tfBalance.setText("0.0");
             tfEmail.setText("");
             tfPassword.setText("");
+            setupNumericField(tfBalance);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -86,6 +87,7 @@ public class CreateAccountController implements Initializable {
     public void onSubmit(ActionEvent actionEvent) throws Exception {
         String email = tfEmail.getText().trim();
         String password = tfPassword.getText();
+        String balanceText = tfBalance.getText().trim();
 
         if (email.isEmpty() || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
             showAlert("Invalid Email", "Please enter a valid email address.", Alert.AlertType.ERROR);
@@ -101,6 +103,11 @@ public class CreateAccountController implements Initializable {
             return;
         }
 
+        if (!balanceText.matches("\\d+(\\.\\d{1,2})?")) {
+            showAlert("Invalid Balance", "Balance must contain only numbers and optional decimals.", Alert.AlertType.ERROR);
+            return;
+        }
+
         Account account = new Account();
         account.setName(tfName.getText());
         account.setDescription(tfDesc.getText());
@@ -109,7 +116,7 @@ public class CreateAccountController implements Initializable {
 
         double balance = 0.0;
         try {
-            balance = Double.parseDouble(tfBalance.getText());
+            balance = Double.parseDouble(balanceText);
         } catch (NumberFormatException nfe) {
             System.out.println("Invalid balance format: " + nfe.getMessage());
         }
@@ -129,6 +136,14 @@ public class CreateAccountController implements Initializable {
             System.out.println("CreateAccountController:onSubmit Error: " + ex.getMessage());
             showAlert("Error", "Failed to create account: " + ex.getMessage(), Alert.AlertType.ERROR);
         }
+    }
+
+    private void setupNumericField(TextField field) {
+        field.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                field.setText(oldValue == null ? "" : oldValue);
+            }
+        });
     }
 
     public void onBack(ActionEvent actionEvent) {

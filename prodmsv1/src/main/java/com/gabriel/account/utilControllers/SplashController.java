@@ -35,7 +35,7 @@ public class SplashController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            image = new Image(getClass().getResourceAsStream("/images/wink.gif"));
+            image = new Image(getClass().getResourceAsStream("/images/bank.png"));
             if (image != null) {
                 productImage.setImage(image);
             }
@@ -56,7 +56,7 @@ public class SplashController implements Initializable {
             LoginController loginController = fxmlLoader.getController();
             loginController.setStage(stage);
 
-            Scene scene = new Scene(root, 300, 600);
+            Scene scene = new Scene(root, 960, 540);
             String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
             scene.getStylesheets().add(css);
             stage.setTitle("Login");

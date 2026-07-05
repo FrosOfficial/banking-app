@@ -4,8 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefWidth="520.0"
-            prefHeight="700.0"
+<AnchorPane prefWidth="960.0"
+            prefHeight="540.0"
             xmlns="http://javafx.com/javafx/17.0.2-ea"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.gabriel.account.utilControllers.UserSelectionController">

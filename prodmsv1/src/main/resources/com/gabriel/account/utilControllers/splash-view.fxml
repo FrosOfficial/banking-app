@@ -5,8 +5,8 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="650.0"
-            prefWidth="380.0"
+<AnchorPane prefHeight="540.0"
+            prefWidth="960.0"
             xmlns="http://javafx.com/javafx/17.0.2-ea"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.gabriel.account.utilControllers.SplashController">
@@ -26,8 +26,8 @@
                    prefWidth="320">
 
             <ImageView fx:id="productImage"
-                       fitHeight="220"
-                       fitWidth="320"
+                       fitHeight="260"
+                       fitWidth="420"
                        preserveRatio="true"
                        pickOnBounds="true"/>
 

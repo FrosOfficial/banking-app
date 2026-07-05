@@ -12,6 +12,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.Setter;
@@ -20,6 +22,8 @@ public class LoginController {
 
     @FXML
     private TextField tfEmail;
+    @FXML
+    private ImageView loginImage;
     @FXML
     private PasswordField tfPassword;
     @FXML
@@ -34,6 +38,14 @@ public class LoginController {
     public void initialize() {
         if (tfPassword != null && tfPasswordPlain != null) {
             tfPasswordPlain.textProperty().bindBidirectional(tfPassword.textProperty());
+        }
+        if (loginImage != null) {
+            try {
+                Image image = new Image(getClass().getResourceAsStream("/images/login.png"));
+                loginImage.setImage(image);
+            } catch (Exception ex) {
+                System.out.println("Error loading login image: " + ex.getMessage());
+            }
         }
     }
 
@@ -101,11 +113,14 @@ public class LoginController {
             SplashController splashController = fxmlLoader.getController();
             splashController.setStage(stage);
 
-            Scene scene = new Scene(root, 300, 600);
+            Scene scene = new Scene(root, 960, 540);
             String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
             scene.getStylesheets().add(css);
             stage.setTitle("Banking Application!");
             stage.setScene(scene);
+            stage.setMinWidth(960);
+            stage.setMinHeight(540);
+            stage.setMaximized(true);
             stage.show();
         } catch (Exception ex) {
             System.out.println("Error returning to splash: " + ex.getMessage());
@@ -123,11 +138,14 @@ public class LoginController {
             AccountManController accountManController = fxmlLoader.getController();
             accountManController.setStage(stage);
 
-            Scene scene = new Scene(root, 350, 650);
+            Scene scene = new Scene(root, 960, 540);
             String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
             scene.getStylesheets().add(css);
             stage.setTitle("Account Management System - Admin");
             stage.setScene(scene);
+            stage.setMinWidth(960);
+            stage.setMinHeight(540);
+            stage.setMaximized(true);
             stage.show();
         } catch (Exception ex) {
             System.out.println("Error opening admin dashboard: " + ex.getMessage());
@@ -146,11 +164,14 @@ public class LoginController {
             customerController.setStage(stage);
             customerController.loadCustomerAccount(customerAccount);
 
-            Scene scene = new Scene(root, 350, 650);
+            Scene scene = new Scene(root, 960, 540);
             String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
             scene.getStylesheets().add(css);
             stage.setTitle("Banking Transactions - " + customerAccount.getName());
             stage.setScene(scene);
+            stage.setMinWidth(960);
+            stage.setMinHeight(540);
+            stage.setMaximized(true);
             stage.show();
         } catch (Exception ex) {
             System.out.println("Error opening customer dashboard: " + ex.getMessage());

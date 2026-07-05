@@ -16,6 +16,8 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -44,7 +46,11 @@ public class CustomerController implements Initializable {
     @FXML
     private Label lblBalance;
     @FXML
+    private Label lblWelcome;
+    @FXML
     private TextField tfAmount;
+    @FXML
+    private ImageView customerImage;
 
     private Account currentAccount = null;
 
@@ -54,6 +60,9 @@ public class CustomerController implements Initializable {
             vboxSearch.setManaged(false);
         }
         currentAccount = account;
+        if (lblWelcome != null) {
+            lblWelcome.setText("Welcome, " + account.getName());
+        }
         lblOwner.setText("Owner: " + account.getName());
         lblType.setText("Account Type: " + account.getAccountTypeName());
         lblBalance.setText("Balance: ₱" + account.getBalance());
@@ -62,10 +71,23 @@ public class CustomerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            setupNumericField(tfAmount);
+            setupNumericField(tfSearchId);
+            if (customerImage != null) {
+                Image image = new Image(getClass().getResourceAsStream("/images/bank.png"));
+                customerImage.setImage(image);
+            }
+        } catch (Exception ex) {
+            System.out.println("Error loading customer image: " + ex.getMessage());
+        }
         clearDetails();
     }
 
     private void clearDetails() {
+        if (lblWelcome != null) {
+            lblWelcome.setText("Welcome, Customer");
+        }
         lblStatus.setText("Enter Account ID and click Load.");
         lblOwner.setText("Owner: -");
         lblType.setText("Account Type: -");
@@ -88,6 +110,9 @@ public class CustomerController implements Initializable {
                 clearDetails();
             } else {
                 currentAccount = account;
+                if (lblWelcome != null) {
+                    lblWelcome.setText("Welcome, " + account.getName());
+                }
                 lblOwner.setText("Owner: " + account.getName());
                 lblType.setText("Account Type: " + account.getAccountTypeName());
                 lblBalance.setText("Balance: ₱" + account.getBalance());
@@ -216,7 +241,7 @@ public class CustomerController implements Initializable {
             LoginController loginController = fxmlLoader.getController();
             loginController.setStage(stage);
 
-            Scene scene = new Scene(root, 300, 600);
+            Scene scene = new Scene(root, 960, 540);
             String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
             scene.getStylesheets().add(css);
             stage.setTitle("Login");
@@ -226,6 +251,14 @@ public class CustomerController implements Initializable {
             System.out.println("Error returning to login: " + ex.getMessage());
             ex.printStackTrace();
         }
+    }
+
+    private void setupNumericField(TextField field) {
+        field.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                field.setText(oldValue == null ? "" : oldValue);
+            }
+        });
     }
 
     private void showAlert(String title, String message, Alert.AlertType type) {

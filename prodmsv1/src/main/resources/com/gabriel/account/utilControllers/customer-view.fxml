@@ -2,11 +2,12 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane fx:id="customerPane"
-            prefWidth="520.0"
-            prefHeight="760.0"
+            minWidth="960.0"
+            minHeight="540.0"
             xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.gabriel.account.utilControllers.CustomerController">
@@ -20,25 +21,30 @@
     <top>
 
         <VBox alignment="CENTER"
-              spacing="8"
-              BorderPane.alignment="CENTER">
+              spacing="10"
+              BorderPane.alignment="CENTER"
+              style="-fx-background-color:#007AFF; -fx-background-radius:18; -fx-padding:20 24 18 24; -fx-margin:0 0 10 0; -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0.2, 0, 3);">
 
-            <padding>
-                <Insets bottom="22"/>
-            </padding>
-
-            <Label text="Customer Banking"
-                   styleClass="header-title"/>
-
-            <Label text="Manage your account securely"
-                   style="-fx-font-size:13px;
-                          -fx-text-fill:#6E6E73;"/>
-
-            <Button text="Log Out"
-                    prefWidth="140"
-                    prefHeight="40"
-                    styleClass="btn-close"
-                    onAction="#onLogOut"/>
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <StackPane style="-fx-background-color:white; -fx-background-radius:16; -fx-padding:8;">
+                    <ImageView fx:id="customerImage" fitHeight="62" fitWidth="62" preserveRatio="true" pickOnBounds="true"/>
+                </StackPane>
+                <VBox spacing="4">
+                    <Label text="Customer Banking"
+                           style="-fx-font-size:24px; -fx-font-weight:bold; -fx-text-fill:white;"/>
+                    <Label fx:id="lblWelcome"
+                           text="Welcome, Customer"
+                           style="-fx-font-size:18px; -fx-font-weight:bold; -fx-text-fill:white;"/>
+                    <Label text="Manage your account securely"
+                           style="-fx-font-size:13px; -fx-text-fill:#EAF4FF;"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Log Out"
+                        prefWidth="140"
+                        prefHeight="40"
+                        styleClass="btn-close"
+                        onAction="#onLogOut"/>
+            </HBox>
 
         </VBox>
 

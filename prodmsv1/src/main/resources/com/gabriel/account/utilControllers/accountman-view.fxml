@@ -6,19 +6,16 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane fx:id="prodman"
-            prefWidth="520.0"
-            prefHeight="760.0"
+            minWidth="960.0"
+            minHeight="540.0"
             xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.gabriel.account.utilControllers.AccountManController">
 
     <top>
-
-        <VBox spacing="18">
-
+        <VBox spacing="14">
             <MenuBar>
                 <menus>
-
                     <Menu text="File">
                         <items>
                             <MenuItem text="New Account" onAction="#onCreate"/>
@@ -26,149 +23,77 @@
                             <MenuItem text="Close" onAction="#onClose"/>
                         </items>
                     </Menu>
-
                     <Menu text="Edit">
                         <items>
                             <MenuItem text="Modify" onAction="#onUpdate"/>
                             <MenuItem text="Delete" onAction="#onDelete"/>
                         </items>
                     </Menu>
-
                     <Menu text="About">
                         <items>
                             <MenuItem text="About" onAction="#onAbout"/>
                         </items>
                     </Menu>
-
                 </menus>
             </MenuBar>
 
-            <VBox alignment="CENTER"
-                  spacing="10">
-
+            <VBox alignment="CENTER" spacing="8">
                 <padding>
-                    <Insets top="18"
-                            right="25"
-                            bottom="5"
-                            left="25"/>
+                    <Insets top="16" right="24" bottom="6" left="24"/>
                 </padding>
 
-                <ImageView fx:id="productImage"
-                           fitWidth="120"
-                           fitHeight="120"
-                           preserveRatio="true"
-                           pickOnBounds="true"/>
+                <ImageView fx:id="productImage" fitWidth="110" fitHeight="110" preserveRatio="true" pickOnBounds="true"/>
 
-                <Label text="Account Management"
-                       styleClass="header-title"/>
-
-                <Label text="Manage and monitor customer accounts"
-                       style="-fx-font-size:13px;
-                              -fx-text-fill:#6E6E73;"/>
-
+                <Label text="Account Management" styleClass="header-title"/>
+                <Label text="Manage and monitor customer accounts with a clearer, more readable layout" style="-fx-font-size:13px; -fx-text-fill:#6E6E73;"/>
             </VBox>
-
         </VBox>
-
     </top>
 
     <center>
-
-        <VBox spacing="22">
-
+        <VBox spacing="18">
             <padding>
-                <Insets top="15"
-                        right="25"
-                        bottom="25"
-                        left="25"/>
+                <Insets top="10" right="24" bottom="24" left="24"/>
             </padding>
 
-            <!-- Accounts -->
-
-            <VBox spacing="10"
-                  styleClass="card">
-
-                <Label text="Accounts"
-                       styleClass="form-label"/>
-
-                <ListView fx:id="lvAccounts"
-                          prefHeight="250"
-                          onMouseClicked="#onMouseClicked"/>
-
+            <VBox spacing="10" styleClass="card">
+                <Label text="All Accounts" styleClass="form-label"/>
+                <TableView fx:id="tvAccounts" VBox.vgrow="ALWAYS" minHeight="220" onMouseClicked="#onTableClicked">
+                    <columns>
+                        <TableColumn fx:id="colId" text="Account ID" prefWidth="100"/>
+                        <TableColumn fx:id="colName" text="Owner" prefWidth="180"/>
+                        <TableColumn fx:id="colType" text="Type" prefWidth="140"/>
+                        <TableColumn fx:id="colBalance" text="Balance" prefWidth="130"/>
+                        <TableColumn fx:id="colEmail" text="Email" prefWidth="220"/>
+                    </columns>
+                </TableView>
             </VBox>
 
-            <!-- Account Details -->
+            <VBox spacing="16" styleClass="card">
+                <Label text="Selected Account Details" styleClass="form-label"/>
 
-            <VBox spacing="18"
-                  styleClass="card">
-
-                <Label text="Account Details"
-                       styleClass="form-label"/>
-
-                <GridPane hgap="15"
-                          vgap="15">
-
+                <GridPane hgap="16" vgap="14">
                     <columnConstraints>
-
-                        <ColumnConstraints
-                                prefWidth="130"/>
-
-                        <ColumnConstraints
-                                hgrow="ALWAYS"/>
-
+                        <ColumnConstraints prefWidth="140"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
                     </columnConstraints>
 
-                    <Label text="Account ID"
-                           styleClass="form-label"
-                           GridPane.rowIndex="0"/>
+                    <Label text="Account ID" styleClass="form-label" GridPane.rowIndex="0"/>
+                    <TextField fx:id="tfId" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-                    <TextField fx:id="tfId"
-                               prefHeight="42"
-                               GridPane.columnIndex="1"
-                               GridPane.rowIndex="0"/>
+                    <Label text="Owner" styleClass="form-label" GridPane.rowIndex="1"/>
+                    <TextField fx:id="tfName" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                    <Label text="Owner"
-                           styleClass="form-label"
-                           GridPane.rowIndex="1"/>
+                    <Label text="Description" styleClass="form-label" GridPane.rowIndex="2"/>
+                    <TextField fx:id="tfDesc" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-                    <TextField fx:id="tfName"
-                               prefHeight="42"
-                               GridPane.columnIndex="1"
-                               GridPane.rowIndex="1"/>
+                    <Label text="Account Type" styleClass="form-label" GridPane.rowIndex="3"/>
+                    <TextField fx:id="tfUom" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-                    <Label text="Description"
-                           styleClass="form-label"
-                           GridPane.rowIndex="2"/>
-
-                    <TextField fx:id="tfDesc"
-                               prefHeight="42"
-                               GridPane.columnIndex="1"
-                               GridPane.rowIndex="2"/>
-
-                    <Label text="Account Type"
-                           styleClass="form-label"
-                           GridPane.rowIndex="3"/>
-
-                    <TextField fx:id="tfUom"
-                               prefHeight="42"
-                               GridPane.columnIndex="1"
-                               GridPane.rowIndex="3"/>
-
-                    <Label text="Balance"
-                           styleClass="form-label"
-                           GridPane.rowIndex="4"/>
-
-                    <TextField fx:id="tfBalance"
-                               prefHeight="42"
-                               GridPane.columnIndex="1"
-                               GridPane.rowIndex="4"/>
-
+                    <Label text="Balance" styleClass="form-label" GridPane.rowIndex="4"/>
+                    <TextField fx:id="tfBalance" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
                 </GridPane>
-
             </VBox>
-
         </VBox>
-
     </center>
-
 </BorderPane>

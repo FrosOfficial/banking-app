@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.Setter;
@@ -69,6 +70,14 @@ public class DeleteAccountController implements Initializable {
     }
 
     public void onSubmit(ActionEvent actionEvent) {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirm Delete");
+        confirm.setHeaderText("Delete this account permanently?");
+        confirm.setContentText("This will remove the account and cannot be undone.");
+        if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+            return;
+        }
+
         try {
             Account account = toObject(true);
             AccountService.getService().delete(account.getId());
@@ -102,8 +111,9 @@ public class DeleteAccountController implements Initializable {
 
     public void showErrorDialog(String message, String addtlMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Delete Account");
         alert.setHeaderText(message);
-        alert.getDialogPane().setExpandableContent(new ScrollPane(new TextArea(addtlMessage)));
+        alert.setContentText(addtlMessage);
         alert.showAndWait();
     }
 }

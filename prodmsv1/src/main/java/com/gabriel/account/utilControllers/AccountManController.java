@@ -13,8 +13,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -46,8 +48,7 @@ public class AccountManController implements Initializable {
     public ImageView productImage;
     public BorderPane prodman;
 
-    Image puffy;
-    Image wink;
+    Image bankImage;
 
     @FXML
     public Button createButton;
@@ -60,7 +61,17 @@ public class AccountManController implements Initializable {
 
     public static Account selectedAccount;
     @FXML
-    private ListView<Account> lvAccounts;
+    private TableView<Account> tvAccounts;
+    @FXML
+    private TableColumn<Account, Integer> colId;
+    @FXML
+    private TableColumn<Account, String> colName;
+    @FXML
+    private TableColumn<Account, String> colType;
+    @FXML
+    private TableColumn<Account, Double> colBalance;
+    @FXML
+    private TableColumn<Account, String> colEmail;
 
     UpdateAccountController updateProductController;
     DeleteAccountController deleteProductController;
@@ -70,8 +81,8 @@ public class AccountManController implements Initializable {
     void refresh() throws Exception {
         accountService = AccountService.getService();
         Account[] accounts = accountService.getAccounts();
-        lvAccounts.getItems().clear();
-        lvAccounts.getItems().addAll(accounts);
+        tvAccounts.getItems().clear();
+        tvAccounts.getItems().addAll(accounts);
     }
 
     @Override
@@ -80,11 +91,17 @@ public class AccountManController implements Initializable {
         disableControls();
 
         try {
+            colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+            colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+            colType.setCellValueFactory(new PropertyValueFactory<>("accountTypeName"));
+            colBalance.setCellValueFactory(new PropertyValueFactory<>("balance"));
+            colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+            tvAccounts.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
             refresh();
             try {
-                puffy = new Image(getClass().getResourceAsStream("/images/puffy.gif"));
-                wink = new Image(getClass().getResourceAsStream("/images/wink.gif"));
-                productImage.setImage(puffy);
+                bankImage = new Image(getClass().getResourceAsStream("/images/bank.png"));
+                productImage.setImage(bankImage);
             } catch (Exception ex) {
                 System.out.println("Error loading image: " + ex.getMessage());
             }
@@ -116,8 +133,8 @@ public class AccountManController implements Initializable {
         tfBalance.setText("");
     }
 
-    public void onMouseClicked(MouseEvent mouseEvent) {
-        selectedAccount = lvAccounts.getSelectionModel().getSelectedItem();
+    public void onTableClicked(MouseEvent mouseEvent) {
+        selectedAccount = tvAccounts.getSelectionModel().getSelectedItem();
         if (selectedAccount == null) {
             return;
         }
@@ -140,11 +157,14 @@ public class AccountManController implements Initializable {
                 createProductController.setParentScene(currentScene);
                 createProductController.setAccountService(accountService);
                 createProductController.setAccountManController(this);
-                createViewScene = new Scene(root, 300, 600);
+                createViewScene = new Scene(root);
                 String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
                 createViewScene.getStylesheets().add(css);
                 stage.setTitle("Manage Account");
                 stage.setScene(createViewScene);
+                stage.setMinWidth(960);
+                stage.setMinHeight(540);
+                stage.setMaximized(true);
                 stage.show();
             } else {
                 stage.setScene(createViewScene);
@@ -175,7 +195,7 @@ public class AccountManController implements Initializable {
                 updateProductController.setController(this);
                 updateProductController.setStage(this.stage);
                 updateProductController.setParentScene(currentScene);
-                updateViewScene = new Scene(root, 300, 600);
+                updateViewScene = new Scene(root);
                 String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
                 updateViewScene.getStylesheets().add(css);
             } else {
@@ -207,7 +227,7 @@ public class AccountManController implements Initializable {
                 deleteProductController.setController(this);
                 deleteProductController.setStage(this.stage);
                 deleteProductController.setParentScene(currentScene);
-                deleteViewScene = new Scene(root, 300, 600);
+                deleteViewScene = new Scene(root);
                 String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
                 deleteViewScene.getStylesheets().add(css);
             } else {
@@ -241,11 +261,14 @@ public class AccountManController implements Initializable {
             LoginController loginController = fxmlLoader.getController();
             loginController.setStage(stage);
 
-            Scene scene = new Scene(root, 300, 600);
+            Scene scene = new Scene(root);
             String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
             scene.getStylesheets().add(css);
             stage.setTitle("Login");
             stage.setScene(scene);
+            stage.setMinWidth(960);
+            stage.setMinHeight(540);
+            stage.setMaximized(true);
             stage.show();
         } catch (Exception ex) {
             System.out.println("Error returning to login: " + ex.getMessage());
@@ -267,6 +290,6 @@ public class AccountManController implements Initializable {
     }
 
     public void addItem(Account account) {
-        lvAccounts.getItems().add(account);
+        tvAccounts.getItems().add(account);
     }
 }
