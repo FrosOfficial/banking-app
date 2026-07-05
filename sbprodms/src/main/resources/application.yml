@@ -5,7 +5,7 @@ spring:
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost:3306/bankingappdb?allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&useSSL=false}
     username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:root}
+    password: MySQL
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect

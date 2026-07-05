@@ -5,18 +5,64 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gabriel.account.utilControllers.SplashController">
-    <VBox prefHeight="50.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <StackPane prefHeight="150.0" prefWidth="200.0">
-            <ImageView fx:id="productImage" fitHeight="194.0" fitWidth="285.0" pickOnBounds="true" preserveRatio="true" />
+<AnchorPane prefHeight="650.0"
+            prefWidth="380.0"
+            xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gabriel.account.utilControllers.SplashController">
+
+    <VBox alignment="TOP_CENTER"
+          spacing="28"
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0">
+
+        <padding>
+            <Insets top="35" right="30" bottom="35" left="30"/>
+        </padding>
+
+        <StackPane prefHeight="240"
+                   prefWidth="320">
+
+            <ImageView fx:id="productImage"
+                       fitHeight="220"
+                       fitWidth="320"
+                       preserveRatio="true"
+                       pickOnBounds="true"/>
+
         </StackPane>
-        <TextArea prefHeight="200.0" prefWidth="200.0" promptText="\@Copyright" text="This is a Banking Application developed by modifying the Product Management Application template." wrapText="true">
-            <padding>
-                <Insets bottom="10.0" />
-            </padding>
-        </TextArea>
-        <VBox prefHeight="200.0" prefWidth="100.0">
-            <Button fx:id="btnProceed" mnemonicParsing="false" onAction="#onProceed" text="Proceed" />
+
+        <VBox alignment="CENTER"
+              spacing="6">
+
+            <Label text="Secure Banking"
+                   style="-fx-font-size:26px;
+                          -fx-font-weight:bold;
+                          -fx-text-fill:#1f2937;"/>
+
+            <Label text="Fast • Secure • Reliable"
+                   style="-fx-font-size:13px;
+                          -fx-text-fill:#6b7280;"/>
+
         </VBox>
+
+        <TextArea editable="false"
+                  wrapText="true"
+                  prefWidth="320"
+                  prefHeight="140"
+                  text="This Banking Application was developed by modifying the Product Management Application template."
+                  promptText="@Copyright"/>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <Button fx:id="btnProceed"
+                text="Proceed"
+                prefWidth="300"
+                prefHeight="48"
+                styleClass="btn-primary"
+                onAction="#onProceed"/>
+
     </VBox>
+
 </AnchorPane>

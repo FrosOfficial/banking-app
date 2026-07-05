@@ -4,33 +4,90 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gabriel.account.utilControllers.LoginController">
-    <VBox alignment="CENTER" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane prefHeight="600.0"
+            prefWidth="380.0"
+            xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gabriel.account.utilControllers.LoginController">
+
+    <VBox alignment="CENTER"
+          spacing="30.0"
+          AnchorPane.topAnchor="0.0"
+          AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0">
+
         <padding>
-            <Insets bottom="30.0" left="25.0" right="25.0" top="30.0" />
+            <Insets top="45" right="40" bottom="45" left="40"/>
         </padding>
-        
-        <Label styleClass="header-title" text="Secure Login" style="-fx-font-size: 24px;" />
-        
-        <VBox alignment="CENTER_LEFT" spacing="15.0" VBox.vgrow="ALWAYS">
-            <VBox spacing="6.0">
-                <Label text="Email Address:" styleClass="form-label" />
-                <TextField fx:id="tfEmail" promptText="Enter your email" minHeight="40.0" />
-            </VBox>
-            
-            <VBox spacing="6.0">
-                <Label text="Password:" styleClass="form-label" />
-                <StackPane>
-                    <PasswordField fx:id="tfPassword" promptText="Enter your password" minHeight="40.0" />
-                    <TextField fx:id="tfPasswordPlain" promptText="Enter your password" minHeight="40.0" visible="false" managed="false" />
-                </StackPane>
-                <CheckBox fx:id="chkShowPassword" text="Show Password" onAction="#onToggleShowPassword" style="-fx-font-size: 12px; -fx-text-fill: #4b5563; -fx-padding: 2px 0 0 0;" />
-            </VBox>
-            
-            <VBox alignment="CENTER" spacing="15.0" style="-fx-padding: 20px 0 0 0;">
-                <Button fx:id="btnLogin" text="Login" minWidth="200.0" minHeight="45.0" styleClass="btn-primary" onAction="#onLogin" />
-                <Button fx:id="btnCancel" text="Cancel" minWidth="200.0" minHeight="40.0" styleClass="btn-close" onAction="#onCancel" />
-            </VBox>
+
+        <VBox alignment="CENTER" spacing="8">
+            <Label text="Secure Login"
+                   styleClass="header-title"
+                   style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+            <Label text="Sign in to continue"
+                   style="-fx-font-size: 13px; -fx-text-fill:#6b7280;"/>
         </VBox>
+
+        <VBox spacing="20" maxWidth="300">
+
+            <VBox spacing="7">
+                <Label text="Email Address"
+                       styleClass="form-label"/>
+
+                <TextField fx:id="tfEmail"
+                           promptText="name@example.com"
+                           prefHeight="44"/>
+            </VBox>
+
+            <VBox spacing="7">
+
+                <Label text="Password"
+                       styleClass="form-label"/>
+
+                <StackPane>
+
+                    <PasswordField fx:id="tfPassword"
+                                   promptText="Enter password"
+                                   prefHeight="44"/>
+
+                    <TextField fx:id="tfPasswordPlain"
+                               promptText="Enter password"
+                               prefHeight="44"
+                               visible="false"
+                               managed="false"/>
+
+                </StackPane>
+
+                <CheckBox fx:id="chkShowPassword"
+                          text="Show Password"
+                          onAction="#onToggleShowPassword"
+                          style="-fx-font-size:12px; -fx-text-fill:#6b7280;"/>
+            </VBox>
+
+        </VBox>
+
+        <VBox spacing="12"
+              alignment="CENTER"
+              maxWidth="300">
+
+            <Button fx:id="btnLogin"
+                    text="Login"
+                    prefWidth="300"
+                    prefHeight="46"
+                    styleClass="btn-primary"
+                    onAction="#onLogin"/>
+
+            <Button fx:id="btnCancel"
+                    text="Cancel"
+                    prefWidth="300"
+                    prefHeight="42"
+                    styleClass="btn-close"
+                    onAction="#onCancel"/>
+
+        </VBox>
+
     </VBox>
+
 </AnchorPane>

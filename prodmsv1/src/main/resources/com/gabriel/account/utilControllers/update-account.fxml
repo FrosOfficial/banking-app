@@ -4,52 +4,179 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="600.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gabriel.account.utilControllers.UpdateAccountController">
+<BorderPane prefWidth="520.0"
+            prefHeight="720.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gabriel.account.utilControllers.UpdateAccountController">
+
+   <!-- ================= HEADER ================= -->
+
    <top>
-      <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+
+      <VBox alignment="CENTER"
+            spacing="8">
+
          <padding>
-            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            <Insets top="25"
+                    right="25"
+                    bottom="20"
+                    left="25"/>
          </padding>
-         <Label styleClass="header-title" text="Update Account" />
+
+         <Label text="Update Account"
+                styleClass="header-title"/>
+
+         <Label text="Modify customer account information"
+                style="-fx-font-size:13px;
+                          -fx-text-fill:#6E6E73;"/>
+
       </VBox>
+
    </top>
+
+   <!-- ================= CONTENT ================= -->
+
    <center>
-      <VBox spacing="15.0" BorderPane.alignment="CENTER">
+
+      <VBox spacing="22">
+
          <padding>
-            <Insets bottom="15.0" left="15.0" right="15.0" />
+            <Insets top="10"
+                    right="25"
+                    bottom="25"
+                    left="25"/>
          </padding>
-         <GridPane hgap="10.0" vgap="10.0">
-            <columnConstraints>
-               <ColumnConstraints hgrow="NEVER" minWidth="90.0" prefWidth="100.0" />
-               <ColumnConstraints hgrow="ALWAYS" minWidth="150.0" prefWidth="170.0" />
-            </columnConstraints>
-            
-            <Label text="Account ID:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <TextField fx:id="tfId" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            
-            <Label text="Name:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-            <TextField fx:id="tfName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            
-            <Label text="Description:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-            <TextField fx:id="tfDesc" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            
-            <Label text="Account Type:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-            <ComboBox fx:id="cbUom" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-            <Label text="Balance:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-            <TextField fx:id="tfBalance" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         <!-- Account Information Card -->
 
-            <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-            <TextField fx:id="tfEmail" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+         <VBox spacing="20"
+               styleClass="card">
 
-            <Label text="Password:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-            <PasswordField fx:id="tfPassword" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-         </GridPane>
-         
-         <HBox alignment="CENTER" spacing="20.0" style="-fx-padding: 10px 0 0 0;">
-            <Button mnemonicParsing="false" onAction="#onSubmit" styleClass="btn-primary" text="Submit" />
-            <Button mnemonicParsing="false" onAction="#onBack" styleClass="btn-close" text="Back" />
+            <Label text="Account Information"
+                   styleClass="form-label"/>
+
+            <GridPane hgap="18"
+                      vgap="18">
+
+               <columnConstraints>
+
+                  <ColumnConstraints prefWidth="135"/>
+
+                  <ColumnConstraints hgrow="ALWAYS"/>
+
+               </columnConstraints>
+
+               <!-- Account ID -->
+
+               <Label text="Account ID"
+                      styleClass="form-label"
+                      GridPane.rowIndex="0"/>
+
+               <TextField fx:id="tfId"
+                          editable="false"
+                          prefHeight="42"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="0"/>
+
+               <!-- Name -->
+
+               <Label text="Customer Name"
+                      styleClass="form-label"
+                      GridPane.rowIndex="1"/>
+
+               <TextField fx:id="tfName"
+                          prefHeight="42"
+                          promptText="Customer name"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="1"/>
+
+               <!-- Description -->
+
+               <Label text="Description"
+                      styleClass="form-label"
+                      GridPane.rowIndex="2"/>
+
+               <TextField fx:id="tfDesc"
+                          prefHeight="42"
+                          promptText="Savings, Checking, etc."
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="2"/>
+
+               <!-- Account Type -->
+
+               <Label text="Account Type"
+                      styleClass="form-label"
+                      GridPane.rowIndex="3"/>
+
+               <ComboBox fx:id="cbUom"
+                         prefHeight="42"
+                         GridPane.columnIndex="1"
+                         GridPane.rowIndex="3"/>
+
+               <!-- Balance -->
+
+               <Label text="Balance"
+                      styleClass="form-label"
+                      GridPane.rowIndex="4"/>
+
+               <TextField fx:id="tfBalance"
+                          prefHeight="42"
+                          promptText="0.00"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="4"/>
+
+               <!-- Email -->
+
+               <Label text="Email Address"
+                      styleClass="form-label"
+                      GridPane.rowIndex="5"/>
+
+               <TextField fx:id="tfEmail"
+                          prefHeight="42"
+                          promptText="name@example.com"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="5"/>
+
+               <!-- Password -->
+
+               <Label text="Password"
+                      styleClass="form-label"
+                      GridPane.rowIndex="6"/>
+
+               <PasswordField fx:id="tfPassword"
+                              prefHeight="42"
+                              promptText="Enter new password"
+                              GridPane.columnIndex="1"
+                              GridPane.rowIndex="6"/>
+
+            </GridPane>
+
+         </VBox>
+
+         <!-- Buttons -->
+
+         <HBox alignment="CENTER"
+               spacing="20">
+
+            <Button text="Save Changes"
+                    prefWidth="180"
+                    prefHeight="45"
+                    styleClass="btn-primary"
+                    mnemonicParsing="false"
+                    onAction="#onSubmit"/>
+
+            <Button text="Back"
+                    prefWidth="140"
+                    prefHeight="45"
+                    styleClass="btn-close"
+                    mnemonicParsing="false"
+                    onAction="#onBack"/>
+
          </HBox>
+
       </VBox>
+
    </center>
+
 </BorderPane>

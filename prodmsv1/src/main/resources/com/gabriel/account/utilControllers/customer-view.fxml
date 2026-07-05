@@ -4,52 +4,181 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="customerPane" prefHeight="650.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gabriel.account.utilControllers.CustomerController">
+<BorderPane fx:id="customerPane"
+            prefWidth="520.0"
+            prefHeight="760.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gabriel.account.utilControllers.CustomerController">
+
     <padding>
-        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+        <Insets top="20" right="25" bottom="25" left="25"/>
     </padding>
-    
+
+    <!-- ===================== HEADER ===================== -->
+
     <top>
-        <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+
+        <VBox alignment="CENTER"
+              spacing="8"
+              BorderPane.alignment="CENTER">
+
             <padding>
-                <Insets bottom="15.0" />
+                <Insets bottom="22"/>
             </padding>
-            <Label styleClass="header-title" text="Customer Transactions" />
-            <Button text="Log Out" styleClass="btn-close" onAction="#onLogOut" alignment="CENTER" />
+
+            <Label text="Customer Banking"
+                   styleClass="header-title"/>
+
+            <Label text="Manage your account securely"
+                   style="-fx-font-size:13px;
+                          -fx-text-fill:#6E6E73;"/>
+
+            <Button text="Log Out"
+                    prefWidth="140"
+                    prefHeight="40"
+                    styleClass="btn-close"
+                    onAction="#onLogOut"/>
+
         </VBox>
+
     </top>
-    
+
+    <!-- ===================== CONTENT ===================== -->
+
     <center>
-        <VBox spacing="20.0" BorderPane.alignment="CENTER">
-            <!-- Account Loading -->
-            <VBox fx:id="vboxSearch" spacing="8.0" style="-fx-background-color: white; -fx-padding: 10px; -fx-background-radius: 6px; -fx-border-color: #e5e7eb; -fx-border-radius: 6px;">
-                <Label text="Enter Account ID:" styleClass="form-label" />
-                <HBox spacing="10.0">
-                    <TextField fx:id="tfSearchId" promptText="e.g. 1" HBox.hgrow="ALWAYS" />
-                    <Button text="Load" styleClass="btn-primary" onAction="#onLoadAccount" />
+
+        <VBox spacing="20">
+
+            <!-- ================= SEARCH CARD ================= -->
+
+            <VBox spacing="12"
+                  styleClass="card"
+                  fx:id="vboxSearch">
+
+                <Label text="Load Account"
+                       styleClass="form-label"/>
+
+                <HBox spacing="12"
+                      alignment="CENTER_LEFT">
+
+                    <TextField fx:id="tfSearchId"
+                               promptText="Enter Account ID"
+                               prefHeight="42"
+                               HBox.hgrow="ALWAYS"/>
+
+                    <Button text="Load"
+                            prefWidth="100"
+                            prefHeight="42"
+                            styleClass="btn-primary"
+                            onAction="#onLoadAccount"/>
+
                 </HBox>
-                <Label fx:id="lblStatus" text="Enter Account ID and click Load." style="-fx-text-fill: #4b5563; -fx-font-size: 11px;" />
+
+                <Label fx:id="lblStatus"
+                       text="Enter an Account ID to begin."
+                       style="-fx-font-size:12px;
+                              -fx-text-fill:#6E6E73;"/>
+
             </VBox>
-            
-            <!-- Account Details / Balance Inquiry display -->
-            <VBox spacing="10.0" style="-fx-background-color: #f3f4f6; -fx-padding: 15px; -fx-background-radius: 6px; -fx-border-color: #d1d5db; -fx-border-radius: 6px;">
-                <Label text="Account Details" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
-                <Label fx:id="lblOwner" text="Owner: -" styleClass="form-label" />
-                <Label fx:id="lblType" text="Account Type: -" styleClass="form-label" />
-                <Label fx:id="lblBalance" text="Balance: -" style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #059669;" />
-            </VBox>
-            
-            <!-- Transactions Input -->
-            <VBox spacing="12.0" style="-fx-background-color: white; -fx-padding: 15px; -fx-background-radius: 6px; -fx-border-color: #e5e7eb; -fx-border-radius: 6px;" VBox.vgrow="ALWAYS">
-                <Label text="Transaction Amount (₱):" styleClass="form-label" />
-                <TextField fx:id="tfAmount" promptText="Enter amount" />
-                
-                <VBox spacing="10.0" alignment="CENTER" style="-fx-padding: 10px 0 0 0;">
-                    <Button text="Deposit" minWidth="200.0" styleClass="btn-secondary" onAction="#onDeposit" />
-                    <Button text="Withdraw" minWidth="200.0" styleClass="btn-danger" onAction="#onWithdraw" />
-                    <Button text="Transaction History" minWidth="200.0" styleClass="btn-primary" onAction="#onTransactionHistory" />
+
+            <!-- ================= ACCOUNT SUMMARY ================= -->
+
+            <VBox spacing="14"
+                  styleClass="card">
+
+                <Label text="Account Summary"
+                       styleClass="form-label"/>
+
+                <Separator/>
+
+                <HBox alignment="CENTER_LEFT">
+
+                    <Label text="Owner"
+                           styleClass="form-label"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Label fx:id="lblOwner"
+                           text="-"
+                           style="-fx-font-size:14px;"/>
+
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT">
+
+                    <Label text="Account Type"
+                           styleClass="form-label"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Label fx:id="lblType"
+                           text="-"
+                           style="-fx-font-size:14px;"/>
+
+                </HBox>
+
+                <Separator/>
+
+                <VBox spacing="6"
+                      alignment="CENTER">
+
+                    <Label text="Available Balance"
+                           style="-fx-text-fill:#6E6E73;
+                                  -fx-font-size:12px;"/>
+
+                    <Label fx:id="lblBalance"
+                           text="₱0.00"
+                           style="-fx-font-size:30px;
+                                  -fx-font-weight:bold;
+                                  -fx-text-fill:#007AFF;"/>
+
                 </VBox>
+
             </VBox>
+
+            <!-- ================= TRANSACTIONS ================= -->
+
+            <VBox spacing="18"
+                  styleClass="card"
+                  VBox.vgrow="ALWAYS">
+
+                <Label text="Transaction"
+                       styleClass="form-label"/>
+
+                <TextField fx:id="tfAmount"
+                           prefHeight="45"
+                           promptText="Enter amount (₱)"/>
+
+                <VBox spacing="12"
+                      alignment="CENTER">
+
+                    <Button text="Deposit"
+                            prefWidth="260"
+                            prefHeight="45"
+                            styleClass="btn-secondary"
+                            onAction="#onDeposit"/>
+
+                    <Button text="Withdraw"
+                            prefWidth="260"
+                            prefHeight="45"
+                            styleClass="btn-danger"
+                            onAction="#onWithdraw"/>
+
+                    <Button text="Transaction History"
+                            prefWidth="260"
+                            prefHeight="45"
+                            styleClass="btn-primary"
+                            onAction="#onTransactionHistory"/>
+
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+            </VBox>
+
         </VBox>
+
     </center>
+
 </BorderPane>
