@@ -6,9 +6,7 @@
  my designs can't fit the smaller resolution the app opens with. - Viggo */
 
 .root {
-
     -fx-background-color:
-
             linear-gradient(
                     to bottom,
 
@@ -18,22 +16,16 @@
 
                     #F8FAFD 100%
             );
-
     -fx-font-family: "Segoe UI","SF Pro Display","Helvetica Neue",Arial,sans-serif;
-
     -fx-font-size:13px;
-
     -fx-padding:18;
 }
 
 /* Typography stufF */
 
 .header-title{
-
     -fx-font-size:30;
-
     -fx-font-weight:800;
-
     -fx-text-fill:#1D1D1F;
 }
 
@@ -101,32 +93,23 @@
 .list-view{
 
     -fx-background-color:rgba(255,255,255,0.80);
-
     -fx-background-radius:18;
-
     -fx-border-radius:18;
-
     -fx-border-color:#E5E7EB;
-
     -fx-padding:8;
 }
 
 .list-cell{
-
     -fx-background-radius:10;
-
     -fx-padding:11 15;
 }
 
 .list-cell:hover{
-
     -fx-background-color:#EEF6FF;
 }
 
 .list-cell:selected{
-
     -fx-background-color:#007AFF;
-
     -fx-text-fill:white;
 }
 
@@ -142,19 +125,12 @@
 /* Buttons */
 
 .button{
-
     -fx-background-radius:12;
-
     -fx-border-radius:12;
-
     -fx-font-size:14;
-
     -fx-font-weight:bold;
-
     -fx-padding:11 24;
-
     -fx-cursor:hand;
-
     -fx-effect:dropshadow(
             gaussian,
             rgba(0,0,0,0.12),
@@ -166,7 +142,6 @@
 }
 
 .button:hover{
-
     -fx-effect:dropshadow(
             gaussian,
             rgba(0,122,255,0.30),
@@ -175,37 +150,27 @@
             0,
             6
     );
-
     -fx-scale-x:1.02;
-
     -fx-scale-y:1.02;
 }
+
 /* Primary Buttons */
 
 .btn-primary{
-
     -fx-background-color:
-
             linear-gradient(
                     to bottom,
-
                     #3DA2FF,
-
                     #007AFF
             );
-
     -fx-text-fill:white;
 }
 
 .btn-primary:hover{
-
     -fx-background-color:
-
             linear-gradient(
                     to bottom,
-
                     #56B2FF,
-
                     #1488FF
             );
 }
@@ -217,17 +182,12 @@
 /* Secondary Buttons */
 
 .btn-secondary{
-
     -fx-background-color:
-
             linear-gradient(
                     to bottom,
-
                     #45DB78,
-
                     #34C759
             );
-
     -fx-text-fill:white;
 }
 
@@ -242,17 +202,12 @@
 /* Danger Buttons */
 
 .btn-danger{
-
     -fx-background-color:
-
             linear-gradient(
                     to bottom,
-
                     #FF6A61,
-
                     #FF3B30
             );
-
     -fx-text-fill:white;
 }
 
@@ -282,19 +237,12 @@
 /* The White Card Background */
 
 .card {
-
     -fx-background-color: rgba(255,255,255,0.78);
-
     -fx-background-radius: 18;
-
     -fx-border-radius: 18;
-
     -fx-border-width: 1;
-
     -fx-border-color: rgba(255,255,255,0.60);
-
     -fx-padding: 22;
-
     -fx-effect: dropshadow(
             gaussian,
             rgba(0,0,0,0.12),
@@ -309,16 +257,12 @@
 
 .text-area,
 #textArea {
-
     -fx-background-color: white;
     -fx-background-radius: 14;
     -fx-border-radius: 14;
     -fx-border-color: #E5E7EB;
-
     -fx-padding: 10;
-
     -fx-font-size: 13px;
-
     -fx-text-fill: #374151;
 }
 
@@ -387,46 +331,34 @@
 
 .scroll-bar:vertical,
 .scroll-bar:horizontal {
-
     -fx-background-color: transparent;
 }
 
 .scroll-bar .thumb {
-
     -fx-background-color: #C9CDD4;
-
     -fx-background-radius: 20;
 }
 
 .scroll-bar .thumb:hover {
-
     -fx-background-color: #AAB2BD;
 }
 
 /* Checkbox */
 
 .check-box {
-
     -fx-text-fill: #6E6E73;
-
     -fx-font-size: 13px;
 }
 
 .check-box .box {
-
     -fx-background-radius: 6;
-
     -fx-border-radius: 6;
-
     -fx-border-color: #C7CBD1;
-
     -fx-background-color: white;
 }
 
 .check-box:selected .box {
-
     -fx-background-color: #007AFF;
-
     -fx-border-color: #007AFF;
 }
 
@@ -436,11 +368,8 @@
 .text-field:focused,
 .password-field:focused,
 .combo-box:focused{
-
     -fx-border-color:#007AFF;
-
     -fx-border-width:2;
-
     -fx-effect:dropshadow(
             gaussian,
             rgba(0,122,255,0.22),
@@ -451,7 +380,6 @@
     );
 }
 .list-view:focused {
-
     -fx-effect: dropshadow(
             gaussian,
             rgba(0,122,255,0.15),
