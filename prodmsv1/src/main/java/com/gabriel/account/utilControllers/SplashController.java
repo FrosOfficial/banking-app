@@ -35,7 +35,7 @@ public class SplashController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            image = new Image(getClass().getResourceAsStream("/images/wink.gif"));
+            image = new Image(getClass().getResourceAsStream("/images/bank.png"));
             if (image != null) {
                 productImage.setImage(image);
             }
@@ -51,19 +51,19 @@ public class SplashController implements Initializable {
         Window window = node.getScene().getWindow();
         window.hide();
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("user-selection-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("login-view.fxml"));
             Parent root = fxmlLoader.load();
-            UserSelectionController userSelectionController = fxmlLoader.getController();
-            userSelectionController.setStage(stage);
+            LoginController loginController = fxmlLoader.getController();
+            loginController.setStage(stage);
 
-            Scene scene = new Scene(root, 300, 600);
+            Scene scene = new Scene(root, 960, 540);
             String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
             scene.getStylesheets().add(css);
-            stage.setTitle("Role Selection");
+            stage.setTitle("Login");
             stage.setScene(scene);
             stage.show();
         } catch (Exception ex) {
-            System.out.println("Error occurred opening user selection screen: " + ex.getMessage());
+            System.out.println("Error occurred opening login screen: " + ex.getMessage());
             ex.printStackTrace();
         }
     }

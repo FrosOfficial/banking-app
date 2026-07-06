@@ -4,16 +4,94 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gabriel.account.utilControllers.UserSelectionController">
-    <VBox alignment="CENTER" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane prefWidth="960.0"
+            prefHeight="540.0"
+            xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gabriel.account.utilControllers.UserSelectionController">
+
+    <VBox alignment="CENTER"
+          spacing="30"
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0">
+
         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            <Insets top="35"
+                    right="35"
+                    bottom="35"
+                    left="35"/>
         </padding>
-        <Label styleClass="header-title" text="Select User Role" />
-        
-        <VBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
-            <Button fx:id="btnAdmin" minWidth="200.0" minHeight="50.0" styleClass="btn-primary" text="Admin" onAction="#onAdminClick" />
-            <Button fx:id="btnCustomer" minWidth="200.0" minHeight="50.0" styleClass="btn-secondary" text="Customer" onAction="#onCustomerClick" />
+
+        <!-- ===================== HEADER ===================== -->
+
+        <VBox alignment="CENTER"
+              spacing="10">
+
+            <Label text="Secure Banking"
+                   styleClass="header-title"/>
+
+            <Label text="Choose how you'd like to continue"
+                   style="-fx-font-size:15px;
+                          -fx-text-fill:#6E6E73;"/>
+
         </VBox>
+
+        <!-- ===================== ROLE SELECTION CARD ===================== -->
+
+        <VBox alignment="CENTER"
+              spacing="25"
+              styleClass="card"
+              maxWidth="420">
+
+            <padding>
+                <Insets top="30"
+                        right="30"
+                        bottom="30"
+                        left="30"/>
+            </padding>
+
+            <Label text="Select User Role"
+                   style="-fx-font-size:20px;
+                          -fx-font-weight:bold;
+                          -fx-text-fill:#1D1D1F;"/>
+
+            <Label text="Administrators can manage accounts while customers can securely access their banking services."
+                   wrapText="true"
+                   textAlignment="CENTER"
+                   style="-fx-font-size:13px;
+                          -fx-text-fill:#6E6E73;"/>
+
+            <VBox spacing="16"
+                  alignment="CENTER">
+
+                <Button fx:id="btnAdmin"
+                        text="Administrator"
+                        prefWidth="280"
+                        prefHeight="50"
+                        styleClass="btn-primary"
+                        onAction="#onAdminClick"/>
+
+                <Button fx:id="btnCustomer"
+                        text="Customer"
+                        prefWidth="280"
+                        prefHeight="50"
+                        styleClass="btn-secondary"
+                        onAction="#onCustomerClick"/>
+
+            </VBox>
+
+        </VBox>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <!-- ===================== FOOTER ===================== -->
+
+        <Label text="Banking Management System"
+               style="-fx-font-size:12px;
+                      -fx-text-fill:#9CA3AF;"/>
+
     </VBox>
+
 </AnchorPane>

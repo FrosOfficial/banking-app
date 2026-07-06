@@ -28,11 +28,14 @@ public class UserSelectionController {
             AccountManController accountManController = fxmlLoader.getController();
             accountManController.setStage(stage);
 
-            Scene scene = new Scene(root, 350, 650);
+            Scene scene = new Scene(root, 960, 540);
             String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
             scene.getStylesheets().add(css);
             stage.setTitle("Account Management System - Admin");
             stage.setScene(scene);
+            stage.setMinWidth(960);
+            stage.setMinHeight(540);
+            stage.setMaximized(true);
             stage.show();
         } catch (Exception ex) {
             System.out.println("Error occurred opening admin screen: " + ex.getMessage());
@@ -52,11 +55,14 @@ public class UserSelectionController {
             CustomerController customerController = fxmlLoader.getController();
             customerController.setStage(stage);
 
-            Scene scene = new Scene(root, 350, 650);
+            Scene scene = new Scene(root, 960, 540);
             String css = SplashApp.class.getResource("/css/splash.css").toExternalForm();
             scene.getStylesheets().add(css);
             stage.setTitle("Banking Transactions - Customer");
             stage.setScene(scene);
+            stage.setMinWidth(960);
+            stage.setMinHeight(540);
+            stage.setMaximized(true);
             stage.show();
         } catch (Exception ex) {
             System.out.println("Error occurred opening customer screen: " + ex.getMessage());

@@ -9,8 +9,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -30,6 +32,10 @@ public class CreateAccountController implements Initializable {
     @FXML
     public TextField tfBalance;
     public TextField tfPhoto;
+    @FXML
+    public TextField tfEmail;
+    @FXML
+    public PasswordField tfPassword;
     @FXML
     private ComboBox<AccountType> cbUom; // Account Type combo box
     public Button btnSubmit;
@@ -57,6 +63,9 @@ public class CreateAccountController implements Initializable {
             tfName.setText("");
             tfDesc.setText("");
             tfBalance.setText("0.0");
+            tfEmail.setText("");
+            tfPassword.setText("");
+            setupNumericField(tfBalance);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -66,6 +75,8 @@ public class CreateAccountController implements Initializable {
         tfName.setText("");
         tfDesc.setText("");
         tfBalance.setText("0.0");
+        tfEmail.setText("");
+        tfPassword.setText("");
         cbUom.getSelectionModel().clearSelection();
     }
 
@@ -74,13 +85,38 @@ public class CreateAccountController implements Initializable {
     }
 
     public void onSubmit(ActionEvent actionEvent) throws Exception {
+        String email = tfEmail.getText().trim();
+        String password = tfPassword.getText();
+        String balanceText = tfBalance.getText().trim();
+
+        if (email.isEmpty() || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+            showAlert("Invalid Email", "Please enter a valid email address.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        if (password.length() < 8 || 
+            !password.matches(".*[a-z].*") ||
+            !password.matches(".*[A-Z].*") ||
+            !password.matches(".*\\d.*") ||
+            !password.matches(".*[^a-zA-Z0-9].*")) {
+            showAlert("Weak Password", "Password must be at least 8 characters long, containing at least one uppercase letter, one lowercase letter, one digit, and one special character (e.g. _, @, $, !, %, etc.).", Alert.AlertType.ERROR);
+            return;
+        }
+
+        if (!balanceText.matches("\\d+(\\.\\d{1,2})?")) {
+            showAlert("Invalid Balance", "Balance must contain only numbers and optional decimals.", Alert.AlertType.ERROR);
+            return;
+        }
+
         Account account = new Account();
         account.setName(tfName.getText());
         account.setDescription(tfDesc.getText());
+        account.setEmail(email);
+        account.setPassword(password);
 
         double balance = 0.0;
         try {
-            balance = Double.parseDouble(tfBalance.getText());
+            balance = Double.parseDouble(balanceText);
         } catch (NumberFormatException nfe) {
             System.out.println("Invalid balance format: " + nfe.getMessage());
         }
@@ -98,7 +134,16 @@ public class CreateAccountController implements Initializable {
             onBack(actionEvent);
         } catch (Exception ex) {
             System.out.println("CreateAccountController:onSubmit Error: " + ex.getMessage());
+            showAlert("Error", "Failed to create account: " + ex.getMessage(), Alert.AlertType.ERROR);
         }
+    }
+
+    private void setupNumericField(TextField field) {
+        field.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                field.setText(oldValue == null ? "" : oldValue);
+            }
+        });
     }
 
     public void onBack(ActionEvent actionEvent) {
@@ -109,5 +154,13 @@ public class CreateAccountController implements Initializable {
 
         stage.setScene(parentScene);
         stage.show();
+    }
+
+    private void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

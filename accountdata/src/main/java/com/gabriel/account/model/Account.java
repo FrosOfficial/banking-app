@@ -11,6 +11,9 @@ public class Account {
     String accountTypeName;
     double balance;
     String photo;
+    String email;
+    String password;
+    boolean isAdmin;
 
     @Override
     public String toString() {

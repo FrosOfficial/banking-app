@@ -1,7 +1,11 @@
 package com.gabriel.account.controller;
 
+import com.gabriel.account.entity.TransactionData;
 import com.gabriel.account.model.Account;
+import com.gabriel.account.model.Transaction;
+import com.gabriel.account.repository.TransactionDataRepository;
 import com.gabriel.account.service.AccountService;
+import com.gabriel.account.serviceimpl.AccountServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +14,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @RestController
 public class AccountController {
     Logger logger = LoggerFactory.getLogger(AccountController.class);
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private AccountServiceImpl accountServiceImpl;
+
+    @Autowired
+    private TransactionDataRepository transactionDataRepository;
 
     @GetMapping("/api/account")
     public ResponseEntity<?> listAccounts() {
@@ -85,6 +99,37 @@ public class AccountController {
         return response;
     }
 
+    /**
+     * POST /api/account/login
+     * Body: { "email": "...", "password": "..." }
+     *
+     * Security: uses a parameterized DB lookup (findByEmail) + BCrypt verification.
+     * Returns the matching Account (with isAdmin flag) on success, or HTTP 401.
+     * The client never receives other users' data.
+     */
+    @PostMapping("api/account/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+        String email = credentials.get("email");
+        String password = credentials.get("password");
+        logger.info("Login attempt for email: " + email);
+        if (email == null || password == null) {
+            return ResponseEntity.badRequest().body("Email and password are required");
+        }
+        try {
+            Account account = accountServiceImpl.findByEmailAndPassword(email, password);
+            if (account != null) {
+                logger.info("Login success: " + email + " (isAdmin=" + account.isAdmin() + ")");
+                return ResponseEntity.ok(account);
+            } else {
+                logger.warn("Login failed for: " + email);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+            }
+        } catch (Exception ex) {
+            logger.error("Login error: {}", ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
     @PostMapping("api/account/{id}/deposit")
     public ResponseEntity<?> deposit(@PathVariable final Integer id, @RequestParam final double amount) {
         logger.info("Deposit request for id " + id + " amount " + amount);
@@ -98,6 +143,14 @@ public class AccountController {
             }
             account.setBalance(account.getBalance() + amount);
             Account updatedAccount = accountService.update(account);
+
+            // Log Transaction
+            TransactionData tx = new TransactionData();
+            tx.setAccountId(id);
+            tx.setType("DEPOSIT");
+            tx.setAmount(amount);
+            transactionDataRepository.save(tx);
+
             return ResponseEntity.ok(updatedAccount);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
@@ -120,8 +173,37 @@ public class AccountController {
             }
             account.setBalance(account.getBalance() - amount);
             Account updatedAccount = accountService.update(account);
+
+            // Log Transaction
+            TransactionData tx = new TransactionData();
+            tx.setAccountId(id);
+            tx.setType("WITHDRAWAL");
+            tx.setAmount(amount);
+            transactionDataRepository.save(tx);
+
             return ResponseEntity.ok(updatedAccount);
         } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("api/account/{id}/transactions")
+    public ResponseEntity<?> getTransactions(@PathVariable final Integer id) {
+        logger.info("Transactions request for account id >> " + Integer.toString(id));
+        try {
+            List<TransactionData> txDataList = transactionDataRepository.findByAccountIdOrderByCreatedDesc(id);
+            List<Transaction> txList = txDataList.stream().map(tx -> {
+                Transaction t = new Transaction();
+                t.setId(tx.getId());
+                t.setAccountId(tx.getAccountId());
+                t.setType(tx.getType());
+                t.setAmount(tx.getAmount());
+                t.setCreated(tx.getCreated());
+                return t;
+            }).collect(Collectors.toList());
+            return ResponseEntity.ok(txList);
+        } catch (Exception ex) {
+            logger.error("Failed to retrieve transactions: {}", ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }

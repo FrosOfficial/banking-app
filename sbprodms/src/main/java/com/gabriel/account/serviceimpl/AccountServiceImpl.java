@@ -7,6 +7,7 @@ import com.gabriel.account.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,53 +22,77 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     AccountDataRepository accountDataRepository;
 
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    // -----------------------------------------------------------------------
+    // Internal helper: map entity -> model
+    // -----------------------------------------------------------------------
+    private Account toModel(AccountData d) {
+        Account a = new Account();
+        a.setId(d.getId());
+        a.setName(d.getName());
+        a.setDescription(d.getDescription());
+        a.setAccountTypeId(d.getAccountTypeId());
+        a.setAccountTypeName(d.getAccountTypeName());
+        a.setBalance(d.getBalance());
+        a.setEmail(d.getEmail());
+        a.setPassword(d.getPassword()); // hashed value — never the raw password
+        a.setAdmin(d.isAdmin());
+        return a;
+    }
+
+    // -----------------------------------------------------------------------
+    // Secure login lookup — parameterized query + BCrypt verify
+    // Called only by the /api/account/login endpoint.
+    // -----------------------------------------------------------------------
+    public Account findByEmailAndPassword(String email, String rawPassword) {
+        // DB does the lookup with a PreparedStatement (WHERE email = ?)
+        Optional<AccountData> opt = accountDataRepository.findByEmail(email);
+        if (opt.isEmpty()) {
+            return null; // email not found — do not reveal which field failed
+        }
+        AccountData data = opt.get();
+        // BCrypt compare — never a plain string equality check
+        if (passwordEncoder.matches(rawPassword, data.getPassword())) {
+            return toModel(data);
+        }
+        return null;
+    }
+
+    // -----------------------------------------------------------------------
+    // CRUD
+    // -----------------------------------------------------------------------
     @Override
     public Account[] getAccounts() {
-        List<AccountData> accountsData = new ArrayList<>();
+        // Only return customer accounts — exclude system admin accounts from the list
+        List<AccountData> accountsData = accountDataRepository.findByIsAdminFalse();
         List<Account> accounts = new ArrayList<>();
-        accountDataRepository.findAll().forEach(accountsData::add);
-        Iterator<AccountData> it = accountsData.iterator();
-
-        while (it.hasNext()) {
-            Account account = new Account();
-            AccountData accountData = it.next();
-            account.setId(accountData.getId());
-            account.setName(accountData.getName());
-            account.setDescription(accountData.getDescription());
-            account.setAccountTypeId(accountData.getAccountTypeId());
-            account.setAccountTypeName(accountData.getAccountTypeName());
-            account.setBalance(accountData.getBalance());
-            accounts.add(account);
+        for (AccountData data : accountsData) {
+            accounts.add(toModel(data));
         }
-
-        Account[] array = new Account[accounts.size()];
-        for (int i = 0; i < accounts.size(); i++) {
-            array[i] = accounts.get(i);
-        }
-        return array;
+        return accounts.toArray(new Account[0]);
     }
 
     @Override
     public Account create(Account account) {
-        logger.info("add: Input " + account.toString());
+        logger.info("create: Input " + account.toString());
         AccountData accountData = new AccountData();
         accountData.setName(account.getName());
         accountData.setDescription(account.getDescription());
         accountData.setAccountTypeId(account.getAccountTypeId());
         accountData.setAccountTypeName(account.getAccountTypeName());
         accountData.setBalance(account.getBalance());
+        accountData.setEmail(account.getEmail());
+        accountData.setAdmin(account.isAdmin());
+
+        // Always hash the plain-text password before persisting
+        if (account.getPassword() != null && !account.getPassword().isEmpty()) {
+            accountData.setPassword(passwordEncoder.encode(account.getPassword()));
+        }
 
         accountData = accountDataRepository.save(accountData);
-        logger.info("add: Saved " + accountData.toString());
-
-        Account newAccount = new Account();
-        newAccount.setId(accountData.getId());
-        newAccount.setName(accountData.getName());
-        newAccount.setDescription(accountData.getDescription());
-        newAccount.setAccountTypeId(accountData.getAccountTypeId());
-        newAccount.setAccountTypeName(accountData.getAccountTypeName());
-        newAccount.setBalance(accountData.getBalance());
-        return newAccount;
+        logger.info("create: Saved id=" + accountData.getId());
+        return toModel(accountData);
     }
 
     @Override
@@ -79,49 +104,42 @@ public class AccountServiceImpl implements AccountService {
         accountData.setAccountTypeId(account.getAccountTypeId());
         accountData.setAccountTypeName(account.getAccountTypeName());
         accountData.setBalance(account.getBalance());
+        accountData.setEmail(account.getEmail());
+        accountData.setAdmin(account.isAdmin());
+
+        // Only re-hash when the caller sends a new plain-text password.
+        // BCrypt hashes always start with "$2" — skip encoding if already hashed.
+        String incoming = account.getPassword();
+        if (incoming != null && !incoming.isEmpty() && !incoming.startsWith("$2")) {
+            accountData.setPassword(passwordEncoder.encode(incoming));
+        } else {
+            accountData.setPassword(incoming); // preserve existing hash unchanged
+        }
 
         accountData = accountDataRepository.save(accountData);
-
-        Account newAccount = new Account();
-        newAccount.setId(accountData.getId());
-        newAccount.setName(accountData.getName());
-        newAccount.setDescription(accountData.getDescription());
-        newAccount.setAccountTypeId(accountData.getAccountTypeId());
-        newAccount.setAccountTypeName(accountData.getAccountTypeName());
-        newAccount.setBalance(accountData.getBalance());
-        return newAccount;
+        return toModel(accountData);
     }
 
     @Override
     public Account getAccount(Integer id) {
-        logger.info("Input id >> " + Integer.toString(id));
+        logger.info("getAccount id=" + id);
         Optional<AccountData> optional = accountDataRepository.findById(id);
         if (optional.isPresent()) {
-            logger.info("Is present >> ");
-            Account account = new Account();
-            AccountData accountDatum = optional.get();
-            account.setId(accountDatum.getId());
-            account.setName(accountDatum.getName());
-            account.setDescription(accountDatum.getDescription());
-            account.setAccountTypeId(accountDatum.getAccountTypeId());
-            account.setAccountTypeName(accountDatum.getAccountTypeName());
-            account.setBalance(accountDatum.getBalance());
-            return account;
+            return toModel(optional.get());
         }
-        logger.info("Failed >> unable to locate account");
+        logger.info("getAccount: not found id=" + id);
         return null;
     }
 
     @Override
     public void delete(Integer id) {
-        logger.info("Input >> " + Integer.toString(id));
+        logger.info("delete id=" + id);
         Optional<AccountData> optional = accountDataRepository.findById(id);
         if (optional.isPresent()) {
-            AccountData accountDatum = optional.get();
             accountDataRepository.delete(optional.get());
-            logger.info("Successfully deleted >> " + accountDatum.toString());
+            logger.info("delete: success id=" + id);
         } else {
-            logger.info("Failed >> unable to locate account id: " + Integer.toString(id));
+            logger.info("delete: not found id=" + id);
         }
     }
 }

@@ -1,0 +1,118 @@
+========================================================================
+             BANKING & ACCOUNT MANAGEMENT SYSTEM - SETUP GUIDE
+========================================================================
+
+------------------------------------------------------------------------
+1. PROJECT OVERVIEW
+------------------------------------------------------------------------
+This is a multi-module Maven project consisting of:
+  - accountdata: JPA Entity & Data Layer (produces a shared JAR library).
+  - sbprodms:    Spring Boot REST API Backend Server.
+  - prodmsv1:    JavaFX GUI Desktop Client.
+
+------------------------------------------------------------------------
+2. PREREQUISITES
+------------------------------------------------------------------------
+  - Java Development Kit (JDK) 21 or 22.
+  - Apache Maven 3.8 or higher.
+  - MySQL Server running locally on port 3306.
+
+------------------------------------------------------------------------
+3. DATABASE CONFIGURATION
+------------------------------------------------------------------------
+  The backend reads credentials from environment variables with fallbacks:
+    - DB_URL      (default: jdbc:mysql://localhost:3306/bankingappdb...)
+    - DB_USERNAME (default: root)
+    - DB_PASSWORD (default: root)
+
+  If your MySQL uses different credentials, set the environment variables
+  on your machine before running sbprodms, for example (PowerShell):
+    $env:DB_USERNAME = "youruser"
+    $env:DB_PASSWORD = "yourpassword"
+
+  If you are using the default root/root credentials, no extra setup is
+  needed -- the fallback values will be used automatically.
+
+  Instructions:
+  1. Ensure MySQL is running on port 3306.
+  2. The database 'bankingappdb' will be automatically created on startup
+     if it does not exist (configured via JDBC query parameters).
+  3. Hibernate is set to 'ddl-auto: update'. When the backend (sbprodms)
+     starts up, it automatically creates/updates the database tables:
+       * account_type_data: Stores account categories (Savings, Checking).
+       * account_data:      Stores user details, balances, BCrypt-hashed
+                            passwords, and the isAdmin role flag.
+       * transaction_data:  Stores transaction history logs.
+  4. On first startup, the AdminSeeder automatically inserts the admin
+     account (admin@bank.com) with a BCrypt-hashed password. No manual
+     SQL inserts are needed.
+
+------------------------------------------------------------------------
+4. BUILD & COMPILATION
+------------------------------------------------------------------------
+  To package the modules and register them to your local Maven repository
+  (.m2 folder), run the following command in the ROOT directory:
+
+    mvn install
+
+  * NOTE: Avoid running 'mvn clean install' if the JavaFX client app is
+    currently running, as it holds a file lock on resource assets
+    (wink.gif) and will cause the clean step to fail.
+
+------------------------------------------------------------------------
+5. RUNNING THE APPLICATIONS
+------------------------------------------------------------------------
+  Start the Backend:
+    1. Navigate to the 'sbprodms' directory.
+    2. Run command:  mvn exec:java
+    3. The REST API runs on http://localhost:8080.
+    4. On first run, watch the logs for:
+         "AdminSeeder: Admin account created successfully."
+
+  Start the Frontend Client:
+    1. Navigate to the 'prodmsv1' directory.
+    2. Run command:  mvn exec:java
+    3. The JavaFX desktop interface will launch.
+
+------------------------------------------------------------------------
+6. KEY FEATURES & AUTHENTICATION DETAILS
+------------------------------------------------------------------------
+  Admin Account (Stored in DB -- seeded automatically on first startup):
+    - Email:     admin@bank.com
+    - Password:  AdminPass123!
+    - Note: The password is stored as a BCrypt hash in the database.
+      The admin role is determined by the 'isAdmin' column, not hardcoded.
+
+  Customer Creation:
+    - Admin creates customer accounts from the Admin Panel.
+    - Password requirements:
+        * Minimum 8 characters.
+        * At least one lowercase letter.
+        * At least one uppercase letter.
+        * At least one digit.
+        * At least one special character (e.g. _, @, $, !, %).
+    - Passwords are BCrypt-hashed before being stored in the database.
+
+  Authentication (Secure):
+    - Login sends credentials to POST /api/account/login on the backend.
+    - The server performs a parameterized DB lookup (WHERE email = ?) --
+      only the matching row is retrieved, never all accounts.
+    - The server verifies the password against the stored BCrypt hash.
+    - The client is routed to Admin or Customer view based on the
+      'isAdmin' flag returned from the database.
+    - The "Show Password" checkbox toggles password visibility on login.
+    - The search/load panel is hidden on customer login to prevent
+      accessing other users' account IDs.
+
+  IMPORTANT -- Existing Accounts After This Security Update:
+    - Any customer accounts created BEFORE this update have plain-text
+      passwords in the database and will no longer be able to log in.
+    - Those accounts must be recreated through the Admin Panel.
+    - The admin account is re-seeded automatically and is unaffected.
+
+  Transaction History:
+    - Replaces the old 'Balance Inquiry' button.
+    - Every deposit and withdrawal is logged to the transaction_data table.
+    - Clicking 'Transaction History' on the customer dashboard opens a
+      scrollable popup listing all records with timestamps and amounts.
+========================================================================
